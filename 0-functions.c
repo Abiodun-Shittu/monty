@@ -7,26 +7,32 @@
  */
 int get_arg(char *argv[])
 {
-	FILE *fp;
-	char *line = NULL, *buffer[512];
+	FILE *fp = NULL;
+	char *line = NULL, *buffer[4096];
 	size_t size = 0;
 	stack_t *head = NULL;
-	unsigned int count;
+	unsigned int count = 0;
 
-	fp = fopen(argv[1], "r+");
+	fp = fopen(argv[1], "r");
+	global.fp = fp;
+	global.head = head;
 	if (fp == NULL)
 	{
-		fprintf(stderr, "Error: Can't open file <%s>\n", argv[1]);
-		fclose(fp);
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		/*		fclose(fp);*/
 		exit(EXIT_FAILURE);
 	}
 	while (getline(&line, &size, fp) != -1)
 	{
+		global.line = line;
 		count++;
-		get_buffer(line, buffer);
+		get_buffer(line, buffer); /* to tokenize the line*/
 		if (buffer != NULL)
 		{
-			check_digit(buffer[1]);
+			if (buffer[0] != '\0' && strcmp("push", buffer[0]) == 0)
+				check_digit_push(buffer[1], count);
+			else
+				check_digit(buffer[1], count);
 			exe(buffer[0], &head, count);
 		}
 		else
@@ -34,9 +40,9 @@ int get_arg(char *argv[])
 			count++;
 		}
 	}
-	fclose(fp);
-	free(line);
 	free_stack_t(head);
+	free(global.line);
+	fclose(fp);
 	exit(EXIT_SUCCESS);
 }
 
@@ -58,22 +64,33 @@ int exe(char *op, stack_t **stack, unsigned int line_number)
 		{"swap", swap},
 		{"add", add},
 		{"nop", nop},
+		{"sub", sub},
+		{"div", f_div},
+		{"mul", mul},
+		{"mod", mod},
+		{"pchar", pchar},
+		{"pstr", pstr},
+		{"rotl", rotl},
+		{"rotr", rotr},
 		{NULL, NULL}};
 	if (op == NULL)
+	{
+		free(op);
 		return (0);
-
+	}
 	for (i = 0; op_codes[i].opcode != NULL; i++)
 	{
 		if (strcmp(op_codes[i].opcode, op) == 0)
 		{
-			if (strcmp(op_codes[i].opcode, op_codes[0].opcode) == 0)
-				check_digit(op);
 			op_codes[i].f(stack, line_number);
 			return (0);
 		}
 	}
 
 	fprintf(stderr, "L%u: unknown instruction %s\n", line_number, op);
+	free(global.line);
+	fclose(global.fp);
+	/*	free_stack_t(global.newnode);*/
 	exit(EXIT_FAILURE);
 }
 
@@ -91,7 +108,7 @@ void get_buffer(char *string, char **my_tokens)
 	if (my_tokens == NULL)
 		exit(EXIT_FAILURE);
 	token = strtok(string, separators);
-	while (token != NULL)
+	while (token != NULL && token[0] != '#')
 	{
 		my_tokens[i] = token;
 		i++;
@@ -101,7 +118,7 @@ void get_buffer(char *string, char **my_tokens)
 }
 
 /**
- * free_stack_t -function that freezes memory
+ * free_stack_t - function that freezes memory
  * @head: stack root
  */
 void free_stack_t(stack_t *head)
