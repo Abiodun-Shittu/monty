@@ -1,9 +1,10 @@
 #include "monty.h"
 
 /**
- * pop - function to erases a node
+ * pop - function that erases a node
  * @head: head of the stack
  * @line_number: lines number
+ *
  * Return: On success 1.
  * On error, -1 is returned.
  */
@@ -13,6 +14,13 @@ void pop(stack_t **head, unsigned int line_number)
 
 	(void)line_number;
 	temp = *head;
+	if (temp == NULL)
+	{
+		fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
+		free(global.line);
+		fclose(global.fp);
+		exit(EXIT_FAILURE);
+	}
 	if (temp != NULL)
 	{
 		aux = temp->next;
