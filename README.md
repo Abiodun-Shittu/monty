@@ -1,7 +1,7 @@
 # 0x19. C - Stacks, Queues - LIFO, FIFO
 <p><img src="./img/alx.png"><br>
 
-#  <a href="url"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Coconut_Clipart_Cartoon.png/1082px-Coconut_Clipart_Cartoon.png" align="middle" width="60" height="60"></a> **The Monty language**
+# <a href="url"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Coconut_Clipart_Cartoon.png/1082px-Coconut_Clipart_Cartoon.png" align="middle" width="60" height="60"></a> **The Monty language**
 
 <p>Monty 0.98 is a scripting language that is first compiled into Monty byte codes (Just like Python). It relies on a unique stack, with specific instructions to manipulate it. The goal of this project is to create an interpreter for Monty ByteCodes files.</p>
 
