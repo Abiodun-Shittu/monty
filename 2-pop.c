@@ -1,32 +1,23 @@
 #include "monty.h"
 /**
- * pop - erases a node
- * @head: head of the stack
- * @line_number: line of the comand
- *
- * Return: On success 1.
- * On error, -1 is returned.
- */
-void pop(stack_t **head, unsigned int line_number)
+ * f_pop - prints the top
+ * @head: stack head
+ * @counter: line_number
+ * Return: no return
+*/
+void f_pop(stack_t **head, unsigned int counter)
 {
-	stack_t *temp, *aux, *node;
+	stack_t *h;
 
-	(void)line_number;
-	temp = *head;
-	if (temp == NULL)
+	if (*head == NULL)
 	{
-		fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
-		free(global.line);
-		fclose(global.fp);
+		fprintf(stderr, "L%d: can't pop an empty stack\n", counter);
+		fclose(bus.file);
+		free(bus.content);
+		free_stack(*head);
 		exit(EXIT_FAILURE);
 	}
-	if (temp != NULL)
-	{
-		aux = temp->next;
-		node = temp;
-		if (aux != NULL)
-			aux->prev = NULL;
-		free(node);
-		*head = aux;
-	}
+	h = *head;
+	*head = h->next;
+	free(h);
 }
