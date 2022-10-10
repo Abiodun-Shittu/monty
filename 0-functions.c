@@ -1,133 +1,95 @@
 #include "monty.h"
 
 /**
- * get_arg - get the arguments and proccess the file
- * @argv: arguments vecto
- * Return: 0 success otherwise 1
- */
-
-int get_arg(char *argv[])
+* execute - executes the opcode
+* @stack: head linked list - stack
+* @counter: line_counter
+* @file: poiner to monty file
+* @content: line content
+* Return: no return
+*/
+int execute(char *content, stack_t **stack, unsigned int counter, FILE *file)
 {
-	FILE *fp = NULL;
-	char *line = NULL, *buffer[4096];
-	size_t size = 0;
-	stack_t *head = NULL;
-	unsigned int count = 0;
+	instruction_t opst[] = {
+				{"push", f_push}, {"pall", f_pall}, {"pint", f_pint},
+				{"pop", f_pop},
+				{"swap", f_swap},
+				{"add", f_add},
+				{"nop", f_nop},
+				{"sub", f_sub},
+				{"div", f_div},
+				{"mul", f_mul},
+				{"mod", f_mod},
+				{"pchar", f_pchar},
+				{"pstr", f_pstr},
+				{"rotl", f_rotl},
+				{"rotr", f_rotr},
+				{"queue", f_queue},
+				{"stack", f_stack},
+				{NULL, NULL}
+				};
+	unsigned int i = 0;
+	char *op;
 
-	fp = fopen(argv[1], "r");
-	global.fp = fp;
-	global.head = head;
-	if (fp == NULL)
-	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-/*		fclose(fp);*/
-		exit(EXIT_FAILURE);
-	}
-	while (getline(&line, &size, fp) != -1)
-	{
-		global.line = line;
-		count++;
-		get_buffer(line, buffer); /* to tokenize the line*/
-		if (buffer != NULL)
-		{
-			if (buffer[0] != '\0' && strcmp("push", buffer[0]) == 0)
-				check_digit_push(buffer[1], count);
-			else
-				check_digit(buffer[1], count);
-			exe(buffer[0], &head, count);
-		}
-		else
-		{
-			count++;
-		}
-	}
-	free_stack_t(head);
-	free(global.line);
-	fclose(fp);
-	exit(EXIT_SUCCESS);
-}
-/**
- * exe - select the operation and execute them
- * @op: operation
- * @stack: stack root
- * @line_number: line number in file
- * Return: 0 success, failure 1
- */
-int exe(char *op, stack_t **stack, unsigned int line_number)
-{
-	size_t i;
-	instruction_t op_codes[] = {
-	{"push", push},
-	{"pall", pall},
-	{"pint", pint},
-	{"pop", pop},
-	{"swap", swap},
-	{"add", add},
-	{"nop", nop},
-	{"sub", sub},
-	{"div", f_div},
-	{"mul", mul},
-	{"mod", mod},
-	{"pchar", pchar},
-	{"pstr", pstr},
-	{"rotl", rotl},
-	{"rotr", rotr},
-	{NULL, NULL}
-};
-	if (op == NULL)
-	{
-		free(op);
+	op = strtok(content, " \n\t");
+	if (op && op[0] == '#')
 		return (0);
-	}
-	for (i = 0; op_codes[i].opcode != NULL; i++)
+	bus.arg = strtok(NULL, " \n\t");
+	while (opst[i].opcode && op)
 	{
-		if (strcmp(op_codes[i].opcode, op) == 0)
-		{
-			op_codes[i].f(stack, line_number);
+		if (strcmp(op, opst[i].opcode) == 0)
+		{	opst[i].f(stack, counter);
 			return (0);
 		}
-	}
-
-	fprintf(stderr, "L%u: unknown instruction %s\n", line_number, op);
-	free(global.line);
-	fclose(global.fp);
-/*	free_stack_t(global.newnode);*/
-	exit(EXIT_FAILURE);
-}
-/**
- * get_buffer - takes the arguments and save the info in buffer
- * @string: string obtained
- * @my_tokens: tokens from strtok
- */
-void get_buffer(char *string, char **my_tokens)
-{
-	int i = 0;
-	char *token;
-	char *separators = " \r\a\t\n";
-
-	if (my_tokens == NULL)
-		exit(EXIT_FAILURE);
-	token = strtok(string, separators);
-	while (token != NULL && token[0] != '#')
-	{
-		my_tokens[i] = token;
 		i++;
-		token = strtok(NULL, separators);
 	}
-	my_tokens[i] = NULL;
+	if (op && opst[i].opcode == NULL)
+	{ fprintf(stderr, "L%d: unknown instruction %s\n", counter, op);
+		fclose(file);
+		free(content);
+		free_stack(*stack);
+		exit(EXIT_FAILURE); }
+	return (1);
 }
-/**
- * free_stack_t - freezes memory
- * @head: stack root
- */
-void free_stack_t(stack_t *head)
-{
-	stack_t *temp;
 
-	while (head != NULL)
+/**
+ * addnode - add node to the head stack
+ * @head: head of the stack
+ * @n: new_value
+ * Return: no return
+*/
+void addnode(stack_t **head, int n)
+{
+
+	stack_t *new_node, *aux;
+
+	aux = *head;
+	new_node = malloc(sizeof(stack_t));
+	if (new_node == NULL)
+	{ printf("Error\n");
+		exit(0); }
+	if (aux)
+		aux->prev = new_node;
+	new_node->n = n;
+	new_node->next = *head;
+	new_node->prev = NULL;
+	*head = new_node;
+}
+
+/**
+* free_stack - frees a doubly linked list
+* @head: head of the stack
+*/
+void free_stack(stack_t *head)
+{
+	stack_t *aux;
+
+	aux = head;
+	while (head)
 	{
-		temp = head->next;
+		aux = head->next;
 		free(head);
-		head = temp;
+		head = aux;
 	}
 }
+
