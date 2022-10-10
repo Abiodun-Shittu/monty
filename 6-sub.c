@@ -1,23 +1,23 @@
 #include "monty.h"
 /**
- * add - a function that adds the top numbers
+ * sub - a function that substracts the top numbers
  * @stack: a pointer to the stack
  * @line_number: the number of lines
  */
-void add(stack_t **stack, unsigned int line_number)
+void sub(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp, *aux, *node;
 
 	if (*stack == NULL || (*stack)->next == NULL)
 	{
-		fprintf(stderr, "L%d: can't add, stack too short\n", line_number);
+		fprintf(stderr, "L%d: can't sub, stack too short\n", line_number);
 		free(global.line);
 		fclose(global.fp);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->next != NULL)
 	{
-		(*stack)->next->n += (*stack)->n;
+		(*stack)->next->n = (*stack)->next->n - (*stack)->n;
 	}
 	temp = *stack;
 	if (temp != NULL)

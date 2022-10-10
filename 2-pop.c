@@ -1,9 +1,8 @@
 #include "monty.h"
-
 /**
- * pop - function that erases a node
+ * pop - erases a node
  * @head: head of the stack
- * @line_number: lines number
+ * @line_number: line of the comand
  *
  * Return: On success 1.
  * On error, -1 is returned.

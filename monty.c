@@ -1,14 +1,15 @@
 #include "monty.h"
-int global_num = 0;
+global_stack global = {NULL, 0, NULL, NULL, NULL};
 
 /**
- * main - Entry point
- * @argc: arguments count
- * @argv: arguments vector
- * Return: Zero (0) on success
-*/
+ * main - main function.
+ * @argc: number of command line arguments.
+ * @argv: array containing the program command line arguments
+ * Return: always 0
+ */
 int main(int argc, char *argv[])
 {
+
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");

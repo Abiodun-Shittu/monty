@@ -1,5 +1,4 @@
 #include "monty.h"
-
 /**
  * swap - change info from two nodes
  * @stack: head of the stack
@@ -18,8 +17,7 @@ void swap(stack_t **stack, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 	if (*stack != NULL && (*stack)->next != NULL)
-	{
-		temp = (*stack)->n;
+	{	temp = (*stack)->n;
 		aux = (*stack)->next->n;
 		(*stack)->n = aux;
 		(*stack)->next->n = temp;
