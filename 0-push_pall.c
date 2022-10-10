@@ -1,5 +1,4 @@
 #include "monty.h"
-
 /**
  * push - puts a number into the top node
  * @head: a pointer to the stack
@@ -28,7 +27,6 @@ void push(stack_t **head, unsigned int line_number)
 	new_node->next = *head;
 	*head = new_node;
 }
-
 /**
  * pall - prints all elements of the stack
  * @stack: a pointer to the stack
@@ -53,6 +51,7 @@ void pall(stack_t **stack, unsigned int line_number)
  * @line_number: the number of lines
  * Return: 0 if true, 1 if was converted
  */
+
 int check_digit_push(char *tokens, unsigned int line_number)
 {
 	int i = 0;
@@ -82,13 +81,13 @@ int check_digit_push(char *tokens, unsigned int line_number)
 	global.global_number = atoi(tokens);
 	return (1);
 }
-
 /**
  * check_digit - checks if data is an integer
  * @tokens: a token
  * @line_number: the number of lines
  * Return: 0 if true, 1 if was converted
  */
+
 int check_digit(char *tokens, unsigned int line_number)
 {
 	(void)line_number;
