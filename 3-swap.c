@@ -1,9 +1,9 @@
 #include "monty.h"
 
 /**
- * swap - function that change info from two nodes
+ * swap - change info from two nodes
  * @stack: head of the stack
- * @line_number: lines number
+ * @line_number: line of the comand
  */
 void swap(stack_t **stack, unsigned int line_number)
 {
@@ -13,6 +13,8 @@ void swap(stack_t **stack, unsigned int line_number)
 	if (*stack == NULL || (*stack)->next == NULL)
 	{
 		fprintf(stderr, "L%d: can't swap, stack too short\n", line_number);
+		free(global.line);
+		fclose(global.fp);
 		exit(EXIT_FAILURE);
 	}
 	if (*stack != NULL && (*stack)->next != NULL)
