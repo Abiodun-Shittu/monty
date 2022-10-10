@@ -1,10 +1,11 @@
 #include "monty.h"
 
 /**
- * get_arg - function that get the arguments and proccess the file
- * @argv: arguments vector
+ * get_arg - get the arguments and proccess the file
+ * @argv: arguments vecto
  * Return: 0 success otherwise 1
  */
+
 int get_arg(char *argv[])
 {
 	FILE *fp = NULL;
@@ -19,7 +20,7 @@ int get_arg(char *argv[])
 	if (fp == NULL)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		/*		fclose(fp);*/
+/*		fclose(fp);*/
 		exit(EXIT_FAILURE);
 	}
 	while (getline(&line, &size, fp) != -1)
@@ -45,9 +46,8 @@ int get_arg(char *argv[])
 	fclose(fp);
 	exit(EXIT_SUCCESS);
 }
-
 /**
- * exe - function that select the operation and execute them
+ * exe - select the operation and execute them
  * @op: operation
  * @stack: stack root
  * @line_number: line number in file
@@ -57,22 +57,23 @@ int exe(char *op, stack_t **stack, unsigned int line_number)
 {
 	size_t i;
 	instruction_t op_codes[] = {
-		{"push", push},
-		{"pall", pall},
-		{"pint", pint},
-		{"pop", pop},
-		{"swap", swap},
-		{"add", add},
-		{"nop", nop},
-		{"sub", sub},
-		{"div", f_div},
-		{"mul", mul},
-		{"mod", mod},
-		{"pchar", pchar},
-		{"pstr", pstr},
-		{"rotl", rotl},
-		{"rotr", rotr},
-		{NULL, NULL}};
+	{"push", push},
+	{"pall", pall},
+	{"pint", pint},
+	{"pop", pop},
+	{"swap", swap},
+	{"add", add},
+	{"nop", nop},
+	{"sub", sub},
+	{"div", f_div},
+	{"mul", mul},
+	{"mod", mod},
+	{"pchar", pchar},
+	{"pstr", pstr},
+	{"rotl", rotl},
+	{"rotr", rotr},
+	{NULL, NULL}
+};
 	if (op == NULL)
 	{
 		free(op);
@@ -90,12 +91,11 @@ int exe(char *op, stack_t **stack, unsigned int line_number)
 	fprintf(stderr, "L%u: unknown instruction %s\n", line_number, op);
 	free(global.line);
 	fclose(global.fp);
-	/*	free_stack_t(global.newnode);*/
+/*	free_stack_t(global.newnode);*/
 	exit(EXIT_FAILURE);
 }
-
 /**
- * get_buffer - function that takes the arguments and save the info in buffer
+ * get_buffer - takes the arguments and save the info in buffer
  * @string: string obtained
  * @my_tokens: tokens from strtok
  */
@@ -116,9 +116,8 @@ void get_buffer(char *string, char **my_tokens)
 	}
 	my_tokens[i] = NULL;
 }
-
 /**
- * free_stack_t - function that freezes memory
+ * free_stack_t - freezes memory
  * @head: stack root
  */
 void free_stack_t(stack_t *head)
