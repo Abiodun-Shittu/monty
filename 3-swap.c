@@ -1,8 +1,9 @@
 #include "monty.h"
+
 /**
  * swap - change info from two nodes
  * @stack: head of the stack
- * @line_number: line of the comand
+ * @line_number: line of the command
  */
 void swap(stack_t **stack, unsigned int line_number)
 {
