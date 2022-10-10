@@ -2,9 +2,9 @@
 global_stack global = {NULL, 0, NULL, NULL, NULL};
 
 /**
- * main - main function.
- * @argc: number of command line arguments.
- * @argv: array containing the program command line arguments
+ * main - Entry point of the program
+ * @argc: arguments count
+ * @argv: arguments vector
  * Return: always 0
  */
 int main(int argc, char *argv[])
